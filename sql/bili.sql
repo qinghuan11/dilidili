@@ -78,3 +78,8 @@ CREATE TABLE `t_danmu` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC COMMENT = '弹幕信息表';
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+INSERT INTO `t_user` (`username`, `password`, `email`)
+VALUES
+    ('alice', 'securepassword1', 'alice@example.com'),
+    ('bob', 'securepassword2', 'bob@example.com');

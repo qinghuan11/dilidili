@@ -54,7 +54,8 @@ public class UserServiceTest {
 
         User foundUser = new User();
         foundUser.setUsername("testuser6");
-        when(userMapper.selectOne(any(QueryWrapper.class))).thenReturn(foundUser);
+        // 修正存根，匹配 selectOne 的两个参数
+        when(userMapper.selectOne(any(QueryWrapper.class), eq(true))).thenReturn(foundUser);
         when(redisTemplate.opsForValue().get(anyString())).thenReturn(null);
 
         User result = userService.findByUsername("testuser6");
