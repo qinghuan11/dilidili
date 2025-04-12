@@ -31,7 +31,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // 允许匿名访问 Swagger UI 和 API 文档
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // 允许匿名访问注册和登录端点
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        // 其他请求需要认证
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new AuthenticationFilter(authenticationManager, jwtUtil, userService), UsernamePasswordAuthenticationFilter.class)
