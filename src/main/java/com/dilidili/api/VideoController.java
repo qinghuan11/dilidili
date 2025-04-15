@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 视频相关接口
+ */
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
@@ -29,12 +32,6 @@ public class VideoController {
 
     /**
      * 上传视频
-     *
-     * @param file        视频文件
-     * @param title       视频标题
-     * @param description 视频描述
-     * @param authorizationHeader 认证头
-     * @return 上传结果
      */
     @PostMapping("/upload")
     public ResponseEntity<Result<String>> uploadVideo(
@@ -49,13 +46,10 @@ public class VideoController {
 
     /**
      * 播放视频
-     *
-     * @param id 视频ID
-     * @return 视频文件流
      */
     @GetMapping(value = "/{id}/play", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> playVideo(@PathVariable Long id) {
-        videoService.incrementViewCount(id); // 增加播放量
+        videoService.incrementViewCount(id);
         Video video = videoService.getById(id);
         if (video == null) {
             return ResponseEntity.notFound().build();
@@ -68,25 +62,15 @@ public class VideoController {
 
     /**
      * 点赞视频
-     *
-     * @param id 视频ID
-     * @param authorizationHeader 认证头
-     * @return 点赞结果
      */
     @PostMapping("/{id}/like")
     public ResponseEntity<Result<String>> likeVideo(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        videoService.incrementLikeCount(id); // 增加点赞数
+        videoService.incrementLikeCount(id);
         return ResponseEntity.ok(Result.success("Video liked successfully"));
     }
 
     /**
      * 查询视频列表
-     *
-     * @param page 页码
-     * @param size 每页大小
-     * @param sortBy 排序字段（viewCount 或 likeCount）
-     * @param order 排序方式（asc 或 desc）
-     * @return 视频列表
      */
     @GetMapping("/list")
     public ResponseEntity<Result<Page<Video>>> listVideos(
@@ -100,13 +84,6 @@ public class VideoController {
 
     /**
      * 搜索视频
-     *
-     * @param keyword 关键词
-     * @param page 页码
-     * @param size 每页大小
-     * @param sortBy 排序字段
-     * @param order 排序方式
-     * @return 视频列表
      */
     @GetMapping("/search")
     public ResponseEntity<Result<Page<Video>>> searchVideos(
@@ -121,10 +98,6 @@ public class VideoController {
 
     /**
      * 删除视频
-     *
-     * @param id 视频ID
-     * @param authorizationHeader 认证头
-     * @return 删除结果
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Result<String>> deleteVideo(
@@ -137,23 +110,21 @@ public class VideoController {
 
     /**
      * 更新视频
-     *
-     * @param id 视频ID
-     * @param request 更新请求
-     * @param authorizationHeader 认证头
-     * @return 更新结果
      */
     @PutMapping("/{id}")
     public ResponseEntity<Result<String>> updateVideo(
             @PathVariable Long id,
-            @RequestBody UpdateVideoRequest request,
-            @RequestHeader("Authorization") String authorizationHeader) {
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody UpdateVideoRequest request) {
         Long userId = getCurrentUserId(authorizationHeader);
         videoService.updateVideo(id, request.getTitle(), request.getDescription(), userId);
         return ResponseEntity.ok(Result.success("Video updated successfully"));
     }
 
-    static class UpdateVideoRequest {
+    /**
+     * 更新视频请求体
+     */
+    public static class UpdateVideoRequest {
         @NotBlank(message = "Title cannot be empty")
         private String title;
         private String description;
@@ -164,6 +135,9 @@ public class VideoController {
         public void setDescription(String description) { this.description = description; }
     }
 
+    /**
+     * 获取当前用户ID
+     */
     private Long getCurrentUserId(String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");
         return jwtUtil.getUserIdFromToken(token);
