@@ -1,110 +1,105 @@
 # Dilidili - 视频分享平台 🎥
 
-**Dilidili** 是一个仿照 **BiliBili** 基于 **Spring Boot** 和 **MyBatis** 构建的现代化视频分享平台，旨在提供一个便捷、安全的视频上传、观看和分享体验。平台具备用户认证、视频管理、评论互动等多种功能，并且使用 **Redis** 来加速数据访问，采用 **JWT** 实现安全的身份验证和授权机制。
+Dilidili 是一个受BiliBili启发的视频分享平台，使用Spring Boot和MyBatis-Plus构建，支持用户认证、视频管理、评论、Redis缓存和JWT安全机制，为现代视频分享应用提供坚实基础！😊
 
-## 📋 核心功能
+## 核心功能 ✨
 
-- **视频上传与播放** 📤🎬：用户可以方便地上传视频，并通过平台进行观看和分享。
-- **视频点赞与评论** 👍💬：支持视频的点赞与评论功能，让用户可以与其他观众互动。
-- **用户管理** 👤🔑：使用 **JWT** 实现无状态的身份认证与授权，支持用户注册、登录和权限管理。
-  - **新增**：用户注册时加密密码，提升安全性。
-  - **新增**：用户登出时将 JWT 令牌加入 Redis 黑名单，防止令牌被重复使用。
-- **视频存储与管理** 💾🗂️：支持视频文件的存储、查询、删除等管理操作，确保平台高效管理大量视频数据。
-- **缓存机制** ⚡：通过 **Redis** 实现缓存加速，提升平台响应速度和用户体验。
-  - **新增**：用户信息的 Redis 缓存管理，支持缓存存储和清除，优化查询性能。
-  - **新增**：使用分布式锁防止缓存击穿，提高高并发场景下的稳定性。
-- **安全机制** 🔒：利用 **Spring Security** 和 **JWT** 确保用户数据的安全性，防止未经授权的访问。
-  - **新增**：增强的安全过滤器链，支持细粒度的权限控制，允许匿名访问注册、登录及 Swagger 文档端点。
+- **视频上传与播放**：轻松上传和流畅播放视频 📤
+- **视频点赞与评论**：通过点赞和评论与视频互动 💬
+- **用户管理**：使用JWT实现安全的用户注册与登录 🔒
+- **密码加密**：通过Spring Security保护用户密码 🛡️
+- **JWT黑名单**：登出时将失效的JWT存入Redis黑名单 🚫
+- **视频存储**：使用MySQL管理视频元数据和文件 🎬
+- **Redis缓存**：通过Redis缓存用户和视频数据，提升性能 ⚡
+- **分布式锁**：使用Redis分布式锁防止缓存击穿 🔧
+- **安全机制**：通过Spring Security和JWT实现基于角色的访问控制 🔐
 
-## ⚙️ 技术栈
+## 技术栈 🛠️
 
-- **Spring Boot**：快速构建基于 RESTful 的 API，简化开发和部署。
-- **MySQL**：存储用户数据、视频信息和评论等业务数据。
-- **Redis**：缓存用户请求和视频数据，提高数据读取效率，减少数据库负载。
-- **JWT**：用于实现安全的用户认证与授权，保证每个请求都是经过验证的。
-- **MyBatis-Plus**：简化数据库操作，提供丰富的查询与 CRUD 功能。
-- **Spring Security**：实现严格的访问控制和安全验证，保障平台的安全。
+- **Spring Boot**：后端框架（版本3.4.3）
+- **MyBatis-Plus**：数据库操作的ORM框架
+- **MySQL**：主数据库，用于数据存储
+- **Redis**：用于缓存和会话管理
+- **JWT**：基于令牌的认证
+- **Spring Security**：保护API和端点安全
+- **H2数据库**：测试用的内存数据库
+- **Swagger**：通过Springdoc OpenAPI提供API文档
 
-## 🏗️ 项目结构
+## 项目结构 📂
 
-- **后端**：基于 **Spring Boot** 构建的服务端应用，提供视频管理、用户认证、权限管理等核心功能。
-- **数据库**：使用 **MySQL** 存储平台的核心数据，包括用户信息、视频记录和评论。
-- **缓存**：**Redis** 用于存储热数据，提升平台的性能，减少数据库访问次数。
-- **安全**：通过 **JWT** 进行用户身份验证，并结合 **Spring Security** 提供完善的权限管理。
+项目是一个基于Spring Boot的后端应用，结合MySQL存储数据、Redis缓存、JWT和Spring Security实现安全认证，适合快速开发和扩展。
 
-## 🛠️ 部署与使用
+## 快速开始 🚀
 
-1. 克隆该项目并导入到开发环境：
+### 前置条件
+- **Java 21**：确保安装了Java 21（项目依赖指定版本）
+- **MySQL**：本地运行MySQL服务（默认端口3306）
+- **Redis**：本地运行Redis服务（默认端口6379）
+- **Maven**：用于构建和运行项目
 
+### 安装步骤
+1. 克隆仓库：
    ```bash
-   git clone https://github.com/your-username/dilidili.git
+   git clone https://github.com/qinghuan11/dilidili.git
+   cd dilidili
    ```
-2. 配置 **MySQL** 数据库与 **Redis** 服务。
-3. 在 `application.yml` 文件中，设置数据库连接、Redis 配置和 JWT 密钥等参数。
-4. 启动 **Spring Boot** 应用：
-
+2. 安装依赖：
+   ```bash
+   mvn install
+   ```
+3. 配置`application.yml`（参考下方示例）。
+4. 启动应用：
    ```bash
    mvn spring-boot:run
    ```
-5. 在本地测试时，可以使用 Postman 或类似工具，模拟 API 请求。
+5. 访问API文档：启动后打开 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) 查看Swagger UI 📜
 
-## 📑 配置示例
-
-在 `application.yml` 中，你可以找到如下配置：
+### 配置示例
+在`src/main/resources/application.yml`中配置MySQL、Redis和JWT：
 
 ```yaml
-# 数据库配置
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/dilidili?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/dilidili?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
-    password: 123456
-  jpa:
-    hibernate:
-      ddl-auto: update
-
-# Redis 配置
-spring:
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
       host: localhost
       port: 6379
-
-# JWT 配置
 jwt:
-  secret: test-secret-key
-  expiration: 86400000  # 1天的过期时间
+  secret: your_jwt_secret
+  expiration: 86400000 # 24小时（毫秒）
 ```
 
-## 👨‍💻 开发与贡献
+**注意**：请根据实际环境替换`your_password`和`your_jwt_secret`。
 
-欢迎各位开发者贡献代码！你可以通过以下步骤参与该项目的开发：
+## API测试 🧪
 
-1. Fork 这个仓库。
-2. 创建一个新的功能分支：
+使用Postman或Swagger UI测试API端点：
+- 注册：`POST /api/auth/register`
+- 登录：`POST /api/auth/login`
+- 上传视频：`POST /api/videos/upload`（需JWT认证）
 
-   ```bash
-   git checkout -b feature-branch
-   ```
-3. 提交更改：
+Swagger UI提供完整的API文档，启动应用后访问 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)。
 
-   ```bash
-   git commit -am 'Add new feature'
-   ```
-4. 推送到分支：
+## 开发与贡献 🤝
 
-   ```bash
-   git push origin feature-branch
-   ```
-5. 提交一个 Pull Request，加入我们一起改进项目！
+欢迎为Dilidili贡献代码！以下是参与步骤：
+1. Fork本仓库。
+2. 创建特性分支：`git checkout -b feature/your-feature`。
+3. 提交更改：`git commit -m "添加你的功能"`。
+4. 推送到分支：`git push origin feature/your-feature`。
+5. 提交Pull Request，描述你的更改。
 
-## 🎯 未来功能
+我们欢迎测试、文档、新功能等贡献！😄
 
-- **视频推荐系统**：根据用户观看历史推荐个性化视频。
-- **评论与社交互动**：添加视频分享、社交互动功能，增加平台活跃度。
-- **高可用性部署**：实现容器化部署和高可用架构，确保平台在高并发情况下的稳定性。
-- **性能监控**：集成 Prometheus 和 Grafana，实时监控系统性能和用户行为。
-- **异步视频上传**：使用消息队列（如 RabbitMQ）实现异步视频上传，提升上传效率。
+## 未来功能 🔮
 
----
+- **视频推荐系统**：基于用户行为的智能推荐 🎯
+- **社交互动**：关注、消息等社交功能 💌
+- **容器化**：使用Docker部署 📦
+- **监控**：集成Prometheus和Grafana 📊
+- **异步上传**：计划使用RabbitMQ等消息队列实现异步视频上传 ⏩
 
