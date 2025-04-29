@@ -1,6 +1,6 @@
 # Dilidili - 视频分享平台 🎥
 
-目前已经有第二版，访问 [GitHub 仓库](https://github.com/qinghuan11/dilidili_springcloud) 查看源码。
+目前已经有第二版，访问 [dilidili_springcloud](https://github.com/qinghuan11/dilidili_springcloud) 查看源码。
 ---
 
 Dilidili 是一个受BiliBili启发的视频分享平台，使用Spring Boot和MyBatis-Plus构建，支持用户认证、视频管理、评论、Redis缓存和JWT安全机制，为现代视频分享应用提供坚实基础！😊
